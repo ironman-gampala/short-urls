@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Shortener</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <h1>URL Shortener</h1>
+    <p class="tagline">Paste a long URL and get a short link.</p>
+    <form id="shorten-form">
+      <input type="url" id="url-input" placeholder="https://example.com/very/long/url" autocomplete="url" required>
+      <input type="text" id="code-input" placeholder="Custom short code (e.g. mmt)" autocomplete="off" maxlength="32" pattern="[A-Za-z0-9]*" title="Letters and numbers only">
+      <button type="submit" id="submit-btn">Shorten</button>
+    </form>
+    <div id="message" class="message" aria-live="polite"></div>
+    <div id="result" class="result" hidden>
+      <label>Short URL:</label>
+      <a id="short-link" href="" target="_blank" rel="noopener noreferrer"></a>
+    </div>
+  </main>
+  <script src="/script.js"></script>
+</body>
+</html>
