@@ -15,10 +15,10 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
-  if (!process.env.NETLIFY) process.exit(1);
+  process.exit(1);
 }
 
-const supabase = createClient(supabaseUrl || "", supabaseServiceKey || "");
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 app.use(express.json());
 
@@ -133,7 +133,7 @@ app.get("/:code", async (req, res) => {
 export { app };
 
 if (!process.env.NETLIFY) {
-  app.listen(PORT, () => {
-    console.log(`URL shortener listening on http://localhost:${PORT}`);
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`URL shortener listening on port ${PORT}`);
   });
 }
