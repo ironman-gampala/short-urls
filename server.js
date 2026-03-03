@@ -2,10 +2,16 @@ import "dotenv/config";
 import express from "express";
 import { createClient } from "@supabase/supabase-js";
 import { fileURLToPath } from "url";
-import { dirname, join } from "path";
+import { dirname, join, resolve } from "path";
+import { existsSync } from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+const PUBLIC_DIR = resolve(__dirname, "public");
+if (!existsSync(PUBLIC_DIR)) {
+  console.warn("Public directory not found at", PUBLIC_DIR, "- static files may 404");
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -53,8 +59,13 @@ function isValidCustomCode(str) {
   return /^[a-zA-Z0-9]+$/.test(s);
 }
 
-// Static files first so /style.css, /script.js, /favicon.ico are served
-app.use(express.static(join(__dirname, "public")));
+// Static files under /static so GET /:code never catches style.css, script.js, etc.
+app.use("/static", express.static(PUBLIC_DIR));
+
+// Root: serve the shortener UI
+app.get("/", (req, res) => {
+  res.sendFile(join(PUBLIC_DIR, "index.html"));
+});
 
 // POST /api/shorten
 app.post("/api/shorten", async (req, res) => {
