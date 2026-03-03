@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <div class="bg-pattern"></div>
@@ -24,7 +24,7 @@
       <div class="input-wrap input-wrap--optional">
         <label for="code-input" class="field-label">Custom short code <span class="optional-badge">optional</span></label>
         <input type="text" id="code-input" placeholder="Leave blank for a random code" autocomplete="off" maxlength="32" pattern="[A-Za-z0-9]*" title="Letters and numbers only" aria-describedby="code-hint">
-        <p id="code-hint" class="hint">Leave empty and we’ll generate a random 7-character code (e.g. <code>xY7kL2m</code>). Or choose your own: letters and numbers only, 1–32 characters.</p>
+        <p id="code-hint" class="hint">Leave empty and we will generate a random 7-character code (e.g. <code>xY7kL2m</code>). Or choose your own: letters and numbers only, 1–32 characters.</p>
       </div>
       <button type="submit" id="submit-btn">
         <span class="btn-text">Shorten</span>
@@ -39,6 +39,6 @@
       </div>
     </div>
   </main>
-  <script src="/script.js"></script>
+  <script src="/static/script.js"></script>
 </body>
 </html>
