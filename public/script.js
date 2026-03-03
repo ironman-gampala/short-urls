@@ -16,6 +16,27 @@
     resultEl.hidden = false;
     shortLinkEl.href = shortUrl;
     shortLinkEl.textContent = shortUrl;
+    const copyBtn = document.getElementById("copy-btn");
+    if (copyBtn) copyBtn.textContent = "Copy";
+  }
+
+  const copyBtn = document.getElementById("copy-btn");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", function () {
+      const url = shortLinkEl.href;
+      if (!url) return;
+      navigator.clipboard.writeText(url).then(
+        function () {
+          copyBtn.textContent = "Copied";
+          copyBtn.classList.add("copied");
+          setTimeout(function () {
+            copyBtn.textContent = "Copy";
+            copyBtn.classList.remove("copied");
+          }, 2000);
+        },
+        function () { showMessage("Copy failed.", true); }
+      );
+    });
   }
 
   function clearResult() {
