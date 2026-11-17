@@ -1,12 +1,28 @@
 {
-  "name": "urlshortener",
+  "name": "short-urls",
   "version": "1.0.0",
-  "description": "Deployable URL shortener with Node.js, Express, and Supabase",
+  "description": "Deployable URL shortener with Node.js, Express, and Supabase — custom codes, real redirects",
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node --watch server.js"
   },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ironman-gampala/short-urls.git"
+  },
+  "keywords": [
+    "url-shortener",
+    "express",
+    "supabase",
+    "nodejs"
+  ],
+  "author": "ironman-gampala",
+  "license": "MIT",
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",
     "dotenv": "^16.4.5",
