@@ -1,6 +1,20 @@
-# URL Shortener
+# Short URLs
 
-A minimal URL shortener built with Node.js, Express, and Supabase. The frontend is vanilla HTML/CSS/JS served as static files; the backend uses the Supabase **service role key** only on the server—the browser never talks to Supabase.
+A small, deployable URL shortener: paste a long link, get a short one (random or custom), and redirects work for anyone — not just your browser.
+
+## About
+
+Unlike a localStorage demo, this app has a real backend. Short codes are stored in **Supabase**, so visiting `https://your-host/aB3xY9z` redirects for every visitor.
+
+| Feature | What it does |
+|---|---|
+| **Shorten** | `POST /api/shorten` with an `http(s)` URL → random 7-character code |
+| **Custom code** | Optional vanity code (`mmt`, `resume`, …) — letters/numbers, 1–32 chars |
+| **Redirect** | `GET /:code` looks up the long URL and returns `302` |
+| **UI** | Vanilla HTML/CSS/JS form at `/` (static assets under `/static`) |
+| **Security** | Supabase **service role key stays on the server** — the browser never talks to Supabase |
+
+**Stack:** Node.js · Express · Supabase · vanilla frontend
 
 ## Supabase setup
 
@@ -14,28 +28,20 @@ create table public.links (
 );
 ```
 
-**RLS (Row Level Security):** You can leave RLS enabled. This app uses the **service role key** only on the server, so the client never connects to Supabase. The service role bypasses RLS. Do not expose the service role key to the frontend.
+You can leave **RLS** enabled. The server uses the service role key, which bypasses RLS. Never put the service role key in frontend code or commit it to git.
 
 ## Local run
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+cp .env.example .env
+# edit .env with SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
+npm start
+```
 
-2. Create a `.env` file (see `.env.example`):
-   ```bash
-   cp .env.example .env
-   ```
-   Then set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` from your Supabase project (Settings → API).
+Open http://localhost:3000 (or whatever `PORT` you set).
 
-3. Start the server:
-   ```bash
-   npm start
-   ```
-   Open http://localhost:3000 (or the `PORT` you set in `.env`).
-
-## Example: create a short link (curl)
+## API example
 
 ```bash
 curl -X POST http://localhost:3000/api/shorten \
@@ -43,15 +49,37 @@ curl -X POST http://localhost:3000/api/shorten \
   -d '{"url":"https://example.com/very/long/path"}'
 ```
 
-Example response:
 ```json
-{"code":"aB3xY9z","shortUrl":"http://localhost:3000/aB3xY9z","longUrl":"https://example.com/very/long/path"}
+{
+  "code": "aB3xY9z",
+  "shortUrl": "http://localhost:3000/aB3xY9z",
+  "longUrl": "https://example.com/very/long/path"
+}
 ```
 
-Visiting `http://localhost:3000/aB3xY9z` redirects to the long URL.
+Custom code:
+
+```bash
+curl -X POST http://localhost:3000/api/shorten \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com","code":"demo"}'
+```
+
+## Environment
+
+| Variable | Required | Purpose |
+|---|---|---|
+| `SUPABASE_URL` | yes | Supabase project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | yes | Server-only key (never expose to the browser) |
+| `PORT` | no | Defaults to `3000` |
 
 ## Deployment
 
-- Set environment variables on your host: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and optionally `PORT`.
-- Run with `node server.js` or `npm start`.
-- Put the app behind a reverse proxy (e.g. nginx) or a platform (e.g. Railway, Render) that sets `PORT` and handles TLS.
+1. Set `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and optionally `PORT` on the host.
+2. Run `npm start` (or `node server.js`).
+3. Put the app behind TLS (Railway, Render, Fly, nginx, etc.).
+
+## Repo
+
+- **Owner:** [ironman-gampala](https://github.com/ironman-gampala)
+- **GitHub:** https://github.com/ironman-gampala/short-urls
